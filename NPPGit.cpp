@@ -39,33 +39,33 @@ static std::vector<FuncItem> funcItems;
 //
 extern "C" __declspec(dllexport) BOOL isUnicode()
 {
-	return TRUE;
+    return TRUE;
 }
 
 extern "C" __declspec(dllexport) void setInfo(NppData notpadPlusData)
 {
-	nppData = notpadPlusData;
+    nppData = notpadPlusData;
 }
 
 extern "C" __declspec(dllexport) const TCHAR * getName()
 {
-	return PLUGIN_NAME;
+    return PLUGIN_NAME;
 }
 
 extern "C" __declspec(dllexport) void beNotified(SCNotification *notifyCode)
 {
-	
+    
 }
 
 extern "C" __declspec(dllexport) LRESULT messageProc(UINT Message, WPARAM wParam, LPARAM lParam)
 {
-	return TRUE;
+    return TRUE;
 }
 
 extern "C" __declspec(dllexport) FuncItem * getFuncsArray(int *nbF)
 {
-	*nbF = funcItems.size();
-	return &funcItems.front();
+    *nbF = funcItems.size();
+    return &funcItems.front();
 }
 
 ///
@@ -75,9 +75,9 @@ extern "C" __declspec(dllexport) FuncItem * getFuncsArray(int *nbF)
 ///
 std::wstring getCurrentFile()
 {
-	TCHAR path[MAX_PATH];
-	::SendMessage(nppData._nppHandle, NPPM_GETFULLCURRENTPATH, MAX_PATH, (LPARAM)path); 
-	return std::wstring(path);
+    TCHAR path[MAX_PATH];
+    ::SendMessage(nppData._nppHandle, NPPM_GETFULLCURRENTPATH, MAX_PATH, (LPARAM)path); 
+    return std::wstring(path);
 }
 
 ///
@@ -87,9 +87,9 @@ std::wstring getCurrentFile()
 ///
 std::wstring getCurrentDirectory()
 {
-	TCHAR path[MAX_PATH];
-	::SendMessage(nppData._nppHandle, NPPM_GETCURRENTDIRECTORY, MAX_PATH, (LPARAM)path);
-	return std::wstring(path);
+    TCHAR path[MAX_PATH];
+    ::SendMessage(nppData._nppHandle, NPPM_GETCURRENTDIRECTORY, MAX_PATH, (LPARAM)path);
+    return std::wstring(path);
 }
 
 ///
@@ -108,8 +108,8 @@ std::vector<std::wstring> getAllFiles(const std::wstring filter)
    std::vector<std::wstring> filePaths;
    for (int i = 0; i < numFiles; i++)
    {
-	  std::wstring cfile(files[i]);
-	  if(cfile.substr(0, filter.size()) == filter) filePaths.push_back(files[i]);
+      std::wstring cfile(files[i]);
+      if(cfile.substr(0, filter.size()) == filter) filePaths.push_back(files[i]);
    }
    return filePaths;
 }
@@ -123,31 +123,31 @@ std::vector<std::wstring> getAllFiles(const std::wstring filter)
 ///         If false, Tortoise is most likely not installed.
 bool getTortoiseLocation(std::wstring &loc)
 {
-	HKEY hKey;
-	if(RegOpenKeyEx(HKEY_LOCAL_MACHINE, TEXT("Software\\TortoiseGit"), 0,
-		KEY_READ | KEY_WOW64_64KEY, &hKey) != ERROR_SUCCESS)
-	{
-		return false;
-	}
+    HKEY hKey;
+    if(RegOpenKeyEx(HKEY_LOCAL_MACHINE, TEXT("Software\\TortoiseGit"), 0,
+        KEY_READ | KEY_WOW64_64KEY, &hKey) != ERROR_SUCCESS)
+    {
+        return false;
+    }
 
-	TCHAR procPath[MAX_PATH];
-	DWORD length = MAX_PATH;
+    TCHAR procPath[MAX_PATH];
+    DWORD length = MAX_PATH;
 
    // Modified Douglas Phillips <doug@sbscomp.com> 2008-12-29 to 
    // support 32-bit and Non-Vista operating Systems.
-	if(RegQueryValueEx( 
+    if(RegQueryValueEx( 
          hKey, 
-		   TEXT("ProcPath"), 
-		   NULL, 
-		   NULL, 
-		   (LPBYTE)procPath, 
-		   &length) != ERROR_SUCCESS)
-	{
-		return false;
-	}
+           TEXT("ProcPath"), 
+           NULL, 
+           NULL, 
+           (LPBYTE)procPath, 
+           &length) != ERROR_SUCCESS)
+    {
+        return false;
+    }
 
-	loc = loc.append(procPath);
-	return true;
+    loc = loc.append(procPath);
+    return true;
 }
 
 ///
@@ -159,23 +159,23 @@ bool getTortoiseLocation(std::wstring &loc)
 ///
 bool launchTortoise(std::wstring &command)
 {
-	STARTUPINFOW si;
-	PROCESS_INFORMATION pi;
-	memset(&si, 0, sizeof(si));
-	memset(&pi, 0, sizeof(pi));
-	si.cb = sizeof(si);
+    STARTUPINFOW si;
+    PROCESS_INFORMATION pi;
+    memset(&si, 0, sizeof(si));
+    memset(&pi, 0, sizeof(pi));
+    si.cb = sizeof(si);
 
-	return CreateProcess(
-		NULL,
-		const_cast<LPWSTR>(command.c_str()),
-		NULL,
-		NULL,
-		FALSE,
-		CREATE_DEFAULT_ERROR_MODE,
-		NULL,
-		NULL,
-		&si,
-		&pi) != 0;
+    return CreateProcess(
+        NULL,
+        const_cast<LPWSTR>(command.c_str()),
+        NULL,
+        NULL,
+        FALSE,
+        CREATE_DEFAULT_ERROR_MODE,
+        NULL,
+        NULL,
+        &si,
+        &pi) != 0;
 }
 
 ///
@@ -184,15 +184,15 @@ bool launchTortoise(std::wstring &command)
 ///
 bool getGitDirectory(std::wstring &path)
 {
-	while (true)
-	{
-		std::wstring gitPath = path + TEXT("\\.git");
-		DWORD ftyp = GetFileAttributes(gitPath.c_str());
-		if (ftyp != INVALID_FILE_ATTRIBUTES) return true;
-		if (std::count(path.begin(), path.end(), '\\') == 0) return false;
-		std::wstring newpath(path.substr(0, path.find_last_of(TEXT("\\"))).c_str());
-		path = newpath;
-	}
+    while (true)
+    {
+        std::wstring gitPath = path + TEXT("\\.git");
+        DWORD ftyp = GetFileAttributes(gitPath.c_str());
+        if (ftyp != INVALID_FILE_ATTRIBUTES) return true;
+        if (std::count(path.begin(), path.end(), '\\') == 0) return false;
+        std::wstring newpath(path.substr(0, path.find_last_of(TEXT("\\"))).c_str());
+        path = newpath;
+    }
 }
 
 ///
@@ -205,54 +205,54 @@ bool getGitDirectory(std::wstring &path)
 ///
 void ExecCommand(const std::wstring &cmd, int mode = EXECMODE_ALLFILES)
 {
-	std::wstring tortoiseLoc;
-	bool tortoiseInstalled = getTortoiseLocation(tortoiseLoc);
-	if(!tortoiseInstalled)
-	{
-		MessageBox(NULL, TEXT("Could not locate TortoiseGit"), TEXT("Git Error"), 0);
-		return;
-	}
-	std::wstring gitPath = getCurrentDirectory();
-	if (!getGitDirectory(gitPath)) 
-	{
-		MessageBox(NULL, TEXT("Could not find .git directory"), TEXT("Git error"), 0);
-		return;
-	}
-	std::wstring command = tortoiseLoc;
-	command += TEXT(" /command:") + cmd + TEXT(" /path:\"");
-	if (mode != EXECMODE_ALLFILES)
-	{
-		std::vector<std::wstring> files;
-		if (mode == EXECMODE_ALLOPENFILES) files = getAllFiles(gitPath);
-		else if (mode == EXECMODE_SIGLEFILE) files.push_back(getCurrentFile());
-		for (std::vector<std::wstring>::iterator itr = files.begin(); itr != files.end(); itr++)
-		{
-			command += (*itr);
-			if (itr != files.end() - 1) command += TEXT("*");
-		}
-	}
-	else
-	{
-		command += gitPath;
-	}
-	command += TEXT("\" /closeonend:2");
-	if(!launchTortoise(command)) MessageBox(NULL, TEXT("Could not launch TortoiseGit"), TEXT("Git error"), 0);
+    std::wstring tortoiseLoc;
+    bool tortoiseInstalled = getTortoiseLocation(tortoiseLoc);
+    if(!tortoiseInstalled)
+    {
+        MessageBox(NULL, TEXT("Could not locate TortoiseGit"), TEXT("Git Error"), 0);
+        return;
+    }
+    std::wstring gitPath = getCurrentDirectory();
+    if (!getGitDirectory(gitPath)) 
+    {
+        MessageBox(NULL, TEXT("Could not find .git directory"), TEXT("Git error"), 0);
+        return;
+    }
+    std::wstring command = tortoiseLoc;
+    command += TEXT(" /command:") + cmd + TEXT(" /path:\"");
+    if (mode != EXECMODE_ALLFILES)
+    {
+        std::vector<std::wstring> files;
+        if (mode == EXECMODE_ALLOPENFILES) files = getAllFiles(gitPath);
+        else if (mode == EXECMODE_SIGLEFILE) files.push_back(getCurrentFile());
+        for (std::vector<std::wstring>::iterator itr = files.begin(); itr != files.end(); itr++)
+        {
+            command += (*itr);
+            if (itr != files.end() - 1) command += TEXT("*");
+        }
+    }
+    else
+    {
+        command += gitPath;
+    }
+    command += TEXT("\" /closeonend:2");
+    if(!launchTortoise(command)) MessageBox(NULL, TEXT("Could not launch TortoiseGit"), TEXT("Git error"), 0);
 }
 
-void AddCommand(PFUNCPLUGINCMD func, LPCTSTR sMenuItemCaption,	UCHAR cShortCut)
+void AddCommand(PFUNCPLUGINCMD func, LPCTSTR sMenuItemCaption,  UCHAR cShortCut)
 {
-	FuncItem item;
+    FuncItem item;
 
-	item._pFunc = func;
-	lstrcpy(item._itemName, sMenuItemCaption);
-	item._init2Check = false;
-	item._pShKey = new ShortcutKey;
-	item._pShKey->_isAlt = true;
-	item._pShKey->_isCtrl = true;
-	item._pShKey->_isShift = false;
-	item._pShKey->_key = cShortCut;
+    item._pFunc = func;
+    lstrcpy(item._itemName, sMenuItemCaption);
+    item._init2Check = false;
+    item._pShKey = new ShortcutKey;
+    item._pShKey->_isAlt = true;
+    item._pShKey->_isCtrl = true;
+    item._pShKey->_isShift = false;
+    item._pShKey->_key = cShortCut;
 
-	funcItems.push_back(item);
+    funcItems.push_back(item);
 }
 
 ////////////////////////////////////////////////////////////////////////////
@@ -266,7 +266,7 @@ void commitFile()
 
 void commitAllFiles()
 {
-	ExecCommand(TEXT("commit"));
+    ExecCommand(TEXT("commit"));
 }
 
 void commitAllOpenFiles()
@@ -291,7 +291,7 @@ void revertFile()
 
 void revertAllFiles()
 {
-	ExecCommand(TEXT("revert"));
+    ExecCommand(TEXT("revert"));
 }
 
 void revertAllOpenFiles()
@@ -306,53 +306,53 @@ void showFileLog()
 
 void showAllFileLog()
 {
-	ExecCommand(TEXT("log"));
+    ExecCommand(TEXT("log"));
 }
 
 void showAllOpenFileLog()
 {
-	ExecCommand(TEXT("log"), EXECMODE_ALLOPENFILES);
+    ExecCommand(TEXT("log"), EXECMODE_ALLOPENFILES);
 }
 
 void pushRep()
 {
-	ExecCommand(TEXT("push"));
+    ExecCommand(TEXT("push"));
 }
 
 void pullRep()
 {
-	ExecCommand(TEXT("pull"));
+    ExecCommand(TEXT("pull"));
 }
 
 ////////////////////////////////////////////////////////////////////////////
 BOOL APIENTRY DllMain( HMODULE hModule,
                        DWORD  ul_reason_for_call,
                        LPVOID lpReserved
-					 )
+                     )
 {
-	switch (ul_reason_for_call)
-	{
-		case DLL_PROCESS_ATTACH:
-			AddCommand(commitFile,			TEXT("Commit Project File"),				0);
-			AddCommand(commitAllFiles,		TEXT("Commit All Project Files"),			0);
-			AddCommand(commitAllOpenFiles,	TEXT("Commit All Open Project Files"),		0);
-			AddCommand(addFile,				TEXT("Add File To Project"),				0);
-			AddCommand(diffFile,			TEXT("Diff Project File"),					0);
-			AddCommand(revertFile,			TEXT("Revert Project File"),				0);
-			AddCommand(revertAllFiles,		TEXT("Revert All Project Files"),			0);
-			AddCommand(revertAllOpenFiles,	TEXT("Revert All Open Project Files"),		0);
-			AddCommand(showFileLog,			TEXT("Show Project File Log"),				0);
-			AddCommand(showAllFileLog,		TEXT("Show All Project File Log"),			0);
-			AddCommand(showAllOpenFileLog,	TEXT("Show All Open Project File Log"),		0);
-			AddCommand(pushRep,				TEXT("Push Project To Repository"),			0);
-			AddCommand(pullRep,				TEXT("Pull Project From Repository"),		0);
-			break;
+    switch (ul_reason_for_call)
+    {
+        case DLL_PROCESS_ATTACH:
+            AddCommand(commitFile,          TEXT("Commit Project File"),                0);
+            AddCommand(commitAllFiles,      TEXT("Commit All Project Files"),           0);
+            AddCommand(commitAllOpenFiles,  TEXT("Commit All Open Project Files"),      0);
+            AddCommand(addFile,             TEXT("Add File To Project"),                0);
+            AddCommand(diffFile,            TEXT("Diff Project File"),                  0);
+            AddCommand(revertFile,          TEXT("Revert Project File"),                0);
+            AddCommand(revertAllFiles,      TEXT("Revert All Project Files"),           0);
+            AddCommand(revertAllOpenFiles,  TEXT("Revert All Open Project Files"),      0);
+            AddCommand(showFileLog,         TEXT("Show Project File Log"),              0);
+            AddCommand(showAllFileLog,      TEXT("Show All Project File Log"),          0);
+            AddCommand(showAllOpenFileLog,  TEXT("Show All Open Project File Log"),     0);
+            AddCommand(pushRep,             TEXT("Push Project To Repository"),         0);
+            AddCommand(pullRep,             TEXT("Pull Project From Repository"),       0);
+            break;
 
-		case DLL_THREAD_ATTACH:
-		case DLL_THREAD_DETACH:
-		case DLL_PROCESS_DETACH:
-			break;
-	}
-	return TRUE;
+        case DLL_THREAD_ATTACH:
+        case DLL_THREAD_DETACH:
+        case DLL_PROCESS_DETACH:
+            break;
+    }
+    return TRUE;
 }
 
