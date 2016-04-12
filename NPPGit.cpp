@@ -235,7 +235,7 @@ void ExecCommand(const std::wstring &cmd, int mode = EXECMODE_ALLFILES)
 	{
 		command += gitPath;
 	}
-	command += TEXT("\" /closeonend:0");
+	command += TEXT("\" /closeonend:2");
 	if(!launchTortoise(command)) MessageBox(NULL, TEXT("Could not launch TortoiseGit"), TEXT("Git error"), 0);
 }
 
