@@ -1,5 +1,5 @@
 ///----------------------------------------------------------------------------
-/// Copyright (c) 2008-2010 
+/// Copyright (c) 2008-2010
 /// Brandon Cannaday
 /// Paranoid Ferret Productions (support@paranoidferret.com)
 ///
