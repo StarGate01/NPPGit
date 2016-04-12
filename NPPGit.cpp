@@ -304,6 +304,16 @@ void showFileLog()
     ExecCommand(TEXT("log"), EXECMODE_SIGLEFILE);
 }
 
+void showAllFileLog()
+{
+	ExecCommand(TEXT("log"));
+}
+
+void showAllOpenFileLog()
+{
+	ExecCommand(TEXT("log"), EXECMODE_ALLOPENFILES);
+}
+
 void pushRep()
 {
 	ExecCommand(TEXT("push"));
@@ -332,6 +342,8 @@ BOOL APIENTRY DllMain( HMODULE hModule,
 			AddCommand(revertAllFiles,		TEXT("Revert All Project Files"),			0);
 			AddCommand(revertAllOpenFiles,	TEXT("Revert All Open Project Files"),		0);
 			AddCommand(showFileLog,			TEXT("Show Project File Log"),				0);
+			AddCommand(showAllFileLog,		TEXT("Show All Project File Log"),			0);
+			AddCommand(showAllOpenFileLog,	TEXT("Show All Open Project File Log"),		0);
 			AddCommand(pushRep,				TEXT("Push Project To Repository"),			0);
 			AddCommand(pullRep,				TEXT("Pull Project From Repository"),		0);
 			break;
