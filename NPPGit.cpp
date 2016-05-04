@@ -279,6 +279,16 @@ void addFile()
    ExecCommand(TEXT("add"), EXECMODE_SIGLEFILE);
 }
 
+void addAllFiles()
+{
+	ExecCommand(TEXT("add"));
+}
+
+void addAllOpenFiles()
+{
+	ExecCommand(TEXT("add"), EXECMODE_ALLOPENFILES);
+}
+
 void diffFile()
 {
    ExecCommand(TEXT("diff"), EXECMODE_SIGLEFILE);
@@ -324,6 +334,11 @@ void pullRep()
     ExecCommand(TEXT("pull"));
 }
 
+void settings()
+{
+	ExecCommand(TEXT("settings"));
+}
+
 ////////////////////////////////////////////////////////////////////////////
 BOOL APIENTRY DllMain( HMODULE hModule,
                        DWORD  ul_reason_for_call,
@@ -337,6 +352,8 @@ BOOL APIENTRY DllMain( HMODULE hModule,
             AddCommand(commitAllFiles,      TEXT("Commit All Project Files"),           0);
             AddCommand(commitAllOpenFiles,  TEXT("Commit All Open Project Files"),      0);
             AddCommand(addFile,             TEXT("Add File To Project"),                0);
+			AddCommand(addAllFiles,			TEXT("Add All Files To Project"),			0);
+			AddCommand(addAllOpenFiles,		TEXT("Add All Open Files To Project"),		0);
             AddCommand(diffFile,            TEXT("Diff Project File"),                  0);
             AddCommand(revertFile,          TEXT("Revert Project File"),                0);
             AddCommand(revertAllFiles,      TEXT("Revert All Project Files"),           0);
@@ -346,6 +363,7 @@ BOOL APIENTRY DllMain( HMODULE hModule,
             AddCommand(showAllOpenFileLog,  TEXT("Show All Open Project File Log"),     0);
             AddCommand(pushRep,             TEXT("Push Project To Repository"),         0);
             AddCommand(pullRep,             TEXT("Pull Project From Repository"),       0);
+			AddCommand(settings,			TEXT("Open Project Settings"),				0);
             break;
 
         case DLL_THREAD_ATTACH:
